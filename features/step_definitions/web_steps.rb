@@ -41,6 +41,12 @@ Given /^the blog is set up$/ do
                 :profile_id => 1,
                 :name => 'admin',
                 :state => 'active'})
+  User.create!({:login => 'user',
+                :password => 'useruser',
+                :email => 'user@snow.com',
+                :profile_id => 2,
+                :name => 'user',
+                :state => 'active'})
 end
 
 And /^I am logged into the admin panel$/ do
@@ -53,6 +59,52 @@ And /^I am logged into the admin panel$/ do
   else
     assert page.has_content?('Login successful')
   end
+end
+
+Given /^I am logged in with username "(.+)" and password "(.+)"$/ do |username, password|
+  visit '/accounts/login'
+  fill_in 'user_login', :with => username
+  fill_in 'user_password', :with => password
+  click_button 'Login'
+  if page.respond_to? :should
+    page.should have_content('Login successful')
+  else
+    assert page.has_content?('Login successful')
+  end
+end
+
+Given /^the following articles exist:$/ do |articles|
+  articles.hashes.each do |article|
+    Article.create!(article)
+  end
+end
+
+Then /^I should see the (.+) of the article "(.+)"$/ do |attr, obj|
+  step %{I should see "#{Article.find_by_title(obj).send(attr.to_sym)}"}
+end
+
+Then /^the (.+) of "(.+)" should be the same as that of "(.+)"$/ do |attr, obj1, obj2|
+  assert Article.find_by_title(obj1).send(attr.to_sym) == Article.find_by_title(obj2).send(attr.to_sym) #|| Article.find_by_title(obj1).send(attr.to_sym) == Article.find_by_title(obj1).send(attr.to_sym)
+end
+
+Then /^the comments of "(.+)" should be in "(.+)"$/ do |obj2, obj1|
+  obj1 = Article.find_by_title(obj2).comments
+  Article.find_by_title(obj2).comments.each do |comment|
+    assert obj1.include?(comment)
+  end
+end
+
+Then /^I should( not)? see the field "([^"]*)"$/ do |negate, name|
+  expectation = negate ? :should_not : :should
+  begin
+    field = find_field(name)
+  rescue Capybara::ElementNotFound
+  end
+  field.send(expectation, be_present)
+end
+
+When /^I fill in "(.+)" with the article id for (.+)$/ do |field, art_name|
+  step %{I fill in "#{field}" with "#{Article.find_by_title(art_name).id}"}
 end
 
 # Single-line step scoper

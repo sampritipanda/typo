@@ -99,7 +99,11 @@ class ArticlesController < ContentController
 
     render "errors/404", :status => 404
   end
-
+  
+  def merge
+    Article.find_by_id(params[:id]).merge_with(Article.find_by_id(params[:article_id]))
+    redirect_to '/admin/content/'
+  end
 
   ### Deprecated Actions ###
 

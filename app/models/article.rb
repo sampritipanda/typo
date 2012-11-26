@@ -207,6 +207,10 @@ class Article < Content
   def edit_url
     blog.url_for(:controller => "/admin/content", :action =>"edit", :id => id)
   end
+  
+  def merge_url
+    blog.url_for("admin/content/merge/#{self.id}")
+  end
 
   def delete_url
     blog.url_for(:controller => "/admin/content", :action =>"destroy", :id => id)
@@ -221,6 +225,20 @@ class Article < Content
     end
 
     urls.uniq
+  end
+  
+  def merge_with(article2)
+    article1 = self
+    
+    article1.body += article2.body
+    article1.title = article2.title
+    article1.author = article2.author
+    article1.comments << article2.comments
+    
+    article1.save!
+    article2.destroy
+    
+    return article1
   end
 
   def really_send_pings(serverurl = blog.base_url, articleurl = nil)

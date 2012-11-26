@@ -57,4 +57,6 @@ group :development, :test do
   gem 'database_cleaner'
   gem 'capybara'
   gem 'railroady'
+  gem 'spork', '~> 1.0rc'
+  gem 'ruby-debug19', :require => 'ruby-debug'
 end
