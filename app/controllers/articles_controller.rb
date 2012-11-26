@@ -101,7 +101,7 @@ class ArticlesController < ContentController
   end
   
   def merge
-    Article.find_by_id(params[:id]).merge_with(Article.find_by_id(params[:article_id]))
+    Article.find_by_id(params[:id]).merge_with(Article.find_by_id(params[:merge_with]))
     redirect_to '/admin/content/'
   end
 

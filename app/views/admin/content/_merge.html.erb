@@ -1,5 +1,5 @@
 <%= form_tag @article.merge_url do %>
 	<h4><%= _("Merge Articles") %></h4>
-	Article ID <input id="merge_with" name="article_id" size="30" type= "text" /> 
+	Article ID <input id="merge_with" name="merge_with" size="30" type= "text" /> 
 	<input type='submit' id='form-submit-button' class='btn btn-info' value="<%= _('Merge') %>" />
 <% end %>
