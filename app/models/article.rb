@@ -233,7 +233,7 @@ class Article < Content
     article1.body += article2.body
     article1.title = article2.title
     article1.author = article2.author
-    article1.comments << article2.comments
+    article1.comments += article2.comments
     
     article1.save!
     article2.destroy
