@@ -237,7 +237,7 @@ class Article < Content
     article2.comments.each { |comment| article1.comments << comment }
     
     article1.save!
-    article2.destroy
+    article2.delete
     
     return article1
   end
