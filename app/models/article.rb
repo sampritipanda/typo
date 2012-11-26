@@ -23,7 +23,7 @@ class Article < Content
   has_many :categories, :through => :categorizations
   has_many :triggers, :as => :pending_item
 
-  has_many :comments,   :dependent => :destroy, :order => "created_at ASC" do
+  has_many :comments,   :dependent => :delete, :order => "created_at ASC" do
 
     # Get only ham or presumed_ham comments
     def ham
